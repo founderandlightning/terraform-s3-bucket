@@ -1,0 +1,4 @@
+aws_region = "region"  # ie eu-west-1
+aws_access_key = "your aws access key"
+aws_secret_key = "your aws secret key"
+bucket_name = "name of the bucket"
