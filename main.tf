@@ -3,26 +3,25 @@ locals  {
 }
 
 provider "aws" {
-    access_key = "${var.aws_access_key}"
-    secret_key = "${var.aws_secret_key}"
-    region = "${var.aws_region}"  # e.g. eu-west-1
+    access_key = var.aws_access_key
+    secret_key = var.aws_secret_key
+    region = var.aws_region  # e.g. eu-west-1
 }
 
-# Defines a user that should be able to write to you test bucket
 resource "aws_iam_user" "bucket_user" {
-   count = "${length(local.s3_bucket_name)}"
+   count = length(local.s3_bucket_name)
    name =  "${local.s3_bucket_name[count.index]}-user"
 }
 
 resource "aws_iam_access_key" "bucket_user" {
-   count = "${length(local.s3_bucket_name)}"
-   user =   "${element(aws_iam_user.bucket_user.*.name, count.index)}"
+   count = length(local.s3_bucket_name)
+   user =   element(aws_iam_user.bucket_user.*.name, count.index)
 }
 
 resource "aws_iam_user_policy" "bucket_user" {
-    count = "${length(local.s3_bucket_name)}"
+    count =length(local.s3_bucket_name)
     name = "${local.s3_bucket_name[count.index]}-policy"
-    user = "${element(aws_iam_user.bucket_user.*.name, count.index)}"
+    user = element(aws_iam_user.bucket_user.*.name, count.index)
     policy= <<EOF
 {
     "Version": "2012-10-17",
@@ -51,7 +50,7 @@ EOF
 
 # create log buckets
 resource "aws_s3_bucket" "log_bucket" {
-  count         = "${length(local.s3_bucket_name)}"
+  count         =length(local.s3_bucket_name)
   bucket        = "${local.s3_bucket_name[count.index]}-logs"
   acl           = "log-delivery-write"
   force_destroy = "true"  
@@ -64,8 +63,8 @@ resource "aws_s3_bucket" "log_bucket" {
 }
 
 resource "aws_s3_bucket" "aws_bucket" {
-  count         = "${length(local.s3_bucket_name)}"
-  bucket        = "${local.s3_bucket_name[count.index]}"
+  count         = length(local.s3_bucket_name)
+  bucket        = local.s3_bucket_name[count.index]
   acl           = "private"
   cors_rule {
         allowed_headers = ["*"]
@@ -75,7 +74,7 @@ resource "aws_s3_bucket" "aws_bucket" {
         max_age_seconds = 3000
     }
      logging {
-    target_bucket = "${element(aws_s3_bucket.log_bucket.*.id, count.index)}" 
+    target_bucket = element(aws_s3_bucket.log_bucket.*.id, count.index)
   }
  
   force_destroy = "true"
