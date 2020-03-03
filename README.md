@@ -11,13 +11,13 @@ Apart from the simplicity of Terraform, this tool can be used with different pro
   - Create four S3 buckets(staging, staging-logs, production, production-logs).
   - Link stage bucket to stage-logs and production bucket to production-logs to enable automatic server access logging.
   - Enable versioning.
-  - Create IAM user, IAM policy, bucket ploicy and assign to relavant bucket(prod or stage).
+  - Create IAM user, IAM policy, bucket policy and assign to relavant bucket(prod or stage).
     
 ## Terraform Installation
   [Install Terraform](https://learn.hashicorp.com/terraform/getting-started/install.html)
 
 ## Setting up the project
-At this point, you should have a Heroku account set up, and terraform binaries installed on your machine. To confirm that terraform has been correctly installed, run terraform version from the command line. You should get a response similar to the one below.
+At this point, terraform binaries installed on your machine. To confirm that terraform has been correctly installed, run terraform version from the command line. You should get a response similar to the one below.
 ```
 C:\terraform>terraform version
 Terraform v0.12.2
